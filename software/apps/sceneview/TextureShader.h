@@ -37,32 +37,24 @@ struct TextureUniforms
 class TextureShader : public Shader
 {
 public:
-    TextureShader()
-        :	Shader(8, 9)
-    {
-    }
+    TextureShader():Shader(8, 9){}
 
     void shadeVertices(vecf16_t *outParams, const vecf16_t *inAttribs, const void *_uniforms,
                        vmask_t) const override
     {
         const TextureUniforms *uniforms = static_cast<const TextureUniforms*>(_uniforms);
-
-        // Multiply vertex position by mvp matrix
+        // 将顶点位置乘以 mvp 矩阵
         vecf16_t coord[4];
         for (int i = 0; i < 3; i++)
             coord[i] = inAttribs[i];
-
         coord[3] = 1.0f;
         uniforms->fMVPMatrix.mulVec(outParams, coord);
-
-        // Copy texture coordinate
+        // 复制纹理坐标
         outParams[4] = inAttribs[3];
         outParams[5] = inAttribs[4];
-
-        // Multiply normal
+        // 乘法
         for (int i = 0; i < 3; i++)
             coord[i] = inAttribs[i + 5];
-
         coord[3] = 1.0f;
         uniforms->fNormalMatrix.mulVec(outParams + 6, coord);
     }
@@ -72,14 +64,12 @@ public:
                      vmask_t mask) const override
     {
         const TextureUniforms *uniforms = static_cast<const TextureUniforms*>(_castToUniforms);
-
-        // Determine lambertian illumination
+        // 确定lambertian光照
         vecf16_t dot = -inParams[2] * uniforms->fLightDirection[0]
                        + -inParams[3] * uniforms->fLightDirection[1]
                        + -inParams[4] * uniforms->fLightDirection[2];
         dot *= uniforms->fDirectional;
         vecf16_t illumination = librender::clamp(dot, 0.0, 1.0) + uniforms->fAmbient;
-
         if (uniforms->fHasTexture)
         {
             sampler[0]->readPixels(inParams[0], inParams[1], mask, outColor);
