@@ -27,7 +27,7 @@ struct ShadowMapUniforms
     Matrix fMVPMatrix;
 };
 
-// Represents depth as a brightness
+// 将深度表示为亮度
 class ShadowMapShader : public Shader
 {
 public:
