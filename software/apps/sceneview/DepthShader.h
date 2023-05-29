@@ -46,7 +46,7 @@ public:
         coord[3] = 1.0f;
         uniforms->fMVPMatrix.mulVec(outParams, coord);
 
-        // Copy depth
+        // 复制深度
         outParams[4] = outParams[2];
     }
 
