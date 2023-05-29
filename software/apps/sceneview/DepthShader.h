@@ -27,21 +27,18 @@ struct DepthUniforms
     Matrix fMVPMatrix;
 };
 
-// Represents depth as a brightness
+// 将深度表示为亮度
 class DepthShader : public Shader
 {
 public:
-    DepthShader()
-        :	Shader(8, 5)
-    {
-    }
+    DepthShader(): Shader(8, 5){}
 
     void shadeVertices(vecf16_t *outParams, const vecf16_t *inAttribs, const void *_uniforms,
                        vmask_t) const override
     {
         const DepthUniforms *uniforms = static_cast<const DepthUniforms*>(_uniforms);
 
-        // Multiply vertex position by mvp matrix
+        // 将顶点位置乘以矩阵
         vecf16_t coord[4];
         for (int i = 0; i < 3; i++)
             coord[i] = inAttribs[i];
@@ -57,9 +54,7 @@ public:
                      const void *, const Texture * const * ,
                      vmask_t) const override
     {
-        // Scale depth value.
-        // XXX this is hardcoded based on the size of the model. The last parameter
-        // may need to be changed for other ones.
+        // 输出深度值
         vecf16_t depthval = 1.0 - ((-inParams[0] - 1.0) / 20.0);
 
         outColor[kColorR] = depthval;
