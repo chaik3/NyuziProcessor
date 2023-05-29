@@ -31,17 +31,14 @@ struct ShadowMapUniforms
 class ShadowMapShader : public Shader
 {
 public:
-    ShadowMapShader()
-        :	Shader(8, 5)
-    {
-    }
+    ShadowMapShader():Shader(8, 5){}
 
     void shadeVertices(vecf16_t *outParams, const vecf16_t *inAttribs, const void *_uniforms,
                        vmask_t) const override
     {
         const ShadowMapUniforms *uniforms = static_cast<const ShadowMapUniforms*>(_uniforms);
 
-        // Multiply vertex position by mvp matrix
+        // 将顶点位置乘以矩阵
         vecf16_t coord[4];
         for (int i = 0; i < 3; i++)
             coord[i] = inAttribs[i];
@@ -49,7 +46,7 @@ public:
         coord[3] = 1.0f;
         uniforms->fMVPMatrix.mulVec(outParams, coord);
 
-        // Copy depth
+        // 复制深度
         outParams[4] = outParams[2];
     }
 
