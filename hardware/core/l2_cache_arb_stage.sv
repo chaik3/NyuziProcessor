@@ -85,7 +85,7 @@ module l2_cache_arb_stage(
         end
         else
         begin
-            // Single core
+            // 单核
             assign grant_oh[0] = l2i_request_valid[0];
             assign grant_request = l2i_request[0];
         end
