@@ -64,12 +64,6 @@ int main()
 
     RenderContext *context = new RenderContext();
 
-    // Shadow map that is both a source texture and render target
-    // XXX Ideally we would make this texture 16 bits with a single channel,
-    // but librender currently hardcodes one surface format (RGBA8888),
-    // which wastes some memory and limits the depth resolution to 256.
-    // It would also be ideal to bind the texture as the depth buffer so
-    // we didn't need a color buffer.
     Surface *lightMapSurface = new Surface(kLightmapSize, kLightmapSize, Surface::FLOAT);
     Surface *lightDepthBuffer = new Surface(kLightmapSize, kLightmapSize, Surface::FLOAT);
     RenderTarget *lightMapTarget = new RenderTarget();
@@ -80,7 +74,7 @@ int main()
     lightMapTexture->enableBilinearFiltering(true);
     lightMapTexture->setMipSurface(0, lightMapSurface);
 
-    // Output framebuffer target
+    // 输出帧缓冲目标
     RenderTarget *outputTarget = new RenderTarget();
     Surface *colorBuffer = new Surface(FB_WIDTH, FB_HEIGHT, Surface::RGBA8888, frameBuffer);
     Surface *depthBuffer = new Surface(FB_WIDTH, FB_HEIGHT, Surface::FLOAT);
@@ -119,7 +113,6 @@ int main()
 
     for (int frame = 0; ; frame++)
     {
-        // Shadow map pass
 #if SHOW_SHADOW_MAP
         context->bindTarget(outputTarget);
 #else
@@ -141,7 +134,7 @@ int main()
         context->finish();
 
 #if !SHOW_SHADOW_MAP
-        // Output pass
+        // 输出结果
         context->bindTexture(0, lightMapTexture);
         context->bindTarget(outputTarget);
         context->bindShader(outputShader);
