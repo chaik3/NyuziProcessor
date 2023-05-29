@@ -54,7 +54,8 @@ public:
                      const void *, const Texture * const * ,
                      vmask_t) const override
     {
-        outColor[0] = inParams[0];  // Copy depth value
+        // 复制深度值
+        outColor[0] = inParams[0];  
     }
 };
 
