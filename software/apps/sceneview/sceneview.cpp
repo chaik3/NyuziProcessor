@@ -69,7 +69,7 @@ char *readResourceFile()
         return nullptr;
     }
 
-    // Read the first block to determine how large the rest of the file is.
+    // 读取第一个块以确定文件的其余部分有多大
     if (fread(&header, sizeof(header), 1, fp) != 1)
     {
         printf("error reading resource file header\n");
