@@ -118,9 +118,7 @@ module l2_cache_read_stage(
         ? hit_way_idx : l2t_fill_way;
     assign dinvalidate = l2t_request.packet_type == L2REQ_DINVALIDATE;
 
-    //
-    // Check for cache hit
-    //
+    // 检查缓存命中
     genvar way_idx;
     generate
         for (way_idx = 0; way_idx < `L2_WAYS; way_idx++)
@@ -135,14 +133,11 @@ module l2_cache_read_stage(
         .one_hot(hit_way_oh),
         .index(hit_way_idx));
 
-    // If this is a fill, read the old (potentially dirty line) so it
-    // can be written back. If it is a cache hit, read the line data.
+    // 如果是填充指令，则阅读旧的（可能是脏的）行，以便写回。如果是缓存命中，读取行数据。
     assign read_address = {(l2t_l2_fill ? l2t_fill_way : hit_way_idx),
         l2t_request.address.set_idx};
 
-    //
-    // Cache memory
-    //
+    // 缓存
     sram_1r1w #(
         .DATA_WIDTH(CACHE_LINE_BITS),
         .SIZE(`L2_WAYS * `L2_SETS),
